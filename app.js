@@ -1,14 +1,17 @@
 let input = document.getElementById("inputbox");
-
 let buttons = document.querySelectorAll("button");
-
 let string = "";
 let arr = Array.from(buttons);
+
 arr.forEach((button) => {
   button.addEventListener("click", (e) => {
     if (e.target.innerHTML == "=") {
-      string = eval(string);
-      input.value = string;
+      try{
+        string = calculate(string);
+        input.value = string;
+      } catch(error) {
+        input.value = "Error";
+      }
     } else if (e.target.innerHTML == "AC") {
       string = "";
       input.value = string;
@@ -21,3 +24,8 @@ arr.forEach((button) => {
     }
   });
 });
+
+function calculate(expression) {
+  const sanitizedExpression = expression.replace(/[^0-9+\-*/().]/g, '');
+  return Function('return ' + sanitizedExpression)();
+}
